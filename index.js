@@ -1432,7 +1432,7 @@ ${members > 1 ? `${members - reads.length - deliveries.length} tersisa` : ""}
             }
             kick(from, mems_ids);
           } else {
-            hexa.groupRemove(from, [entah[0]]);
+            client.groupRemove(from, [entah[0]]);
           }
         } else {
           entah = mek.message.extendedTextMessage.contextInfo.participant;
@@ -3084,7 +3084,6 @@ ${anime.desc}\n\n*Link Batch* : ${anime.batch}\n*Link Download SD* : ${anime.bat
           }
         }
         break;
-
       case "brainly":
         if (args.length < 1) return reply("Pertanyaan apa");
         brien = args.join(" ");
@@ -3099,7 +3098,6 @@ ${anime.desc}\n\n*Link Batch* : ${anime.batch}\n*Link Download SD* : ${anime.bat
           });
         });
         break;
-
       case "igstalk":
         if (!q) return fakegroup("Usernamenya?");
         ig.fetchUser(`${args.join(" ")}`).then((Y) => {
