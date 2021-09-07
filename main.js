@@ -220,6 +220,39 @@ const starts = async (client = new WAConnection()) => {
       console.log("Error : %s", color(e, "red"));
     }
   });
+  client.on("message-delete", async (m) => {
+    if (m.key.remoteJid == "status@broadcast") return;
+    if (!m.key.fromMe && m.key.fromMe) return;
+    m.message =
+      Object.keys(m.message)[0] === "ephemeralMessage"
+        ? m.message.ephemeralMessage.message
+        : m.message;
+    const jam = moment.tz("Asia/Jakarta").format("HH:mm:ss");
+    let d = new Date();
+    let locale = "id";
+    let gmt = new Date(0).getTime() - new Date("1 Januari 2021").getTime();
+    let weton = ["Pahing", "Pon", "Wage", "Kliwon", "Legi"][
+      Math.floor((d * 1 + gmt) / 84600000) % 5
+    ];
+    let week = d.toLocaleDateString(locale, { weekday: "long" });
+    let calender = d.toLocaleDateString(locale, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    const type = Object.keys(m.message)[0];
+    client.sendMessage(
+      m.key.remoteJid,
+      `\`\`\`「 Anti Delete 」\`\`\`
+  •> Nama : @${m.participant.split("@")[0]}
+  •> Waktu : ${jam} ${week} ${calender}
+  •> Type : ${type}`,
+      MessageType.text,
+      { quoted: m.message, contextInfo: { mentionedJid: [m.participant] } }
+    );
+
+    client.copyNForward(m.key.remoteJid, m.message);
+  });
   client.on("chat-update", async (message) => {
     require("./index.js")(client, message);
   });
